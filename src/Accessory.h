@@ -69,7 +69,7 @@ public:
 
 	void printInputs(Stream& stream = Serial);
 
-	void begin();
+	void begin(uint8_t sdaPin = SDA, uint8_t sclPin = SCL, uint32_t frequency = 100000);
 	boolean readData();
 
 	void enableEncryption(bool enc);
