@@ -254,29 +254,28 @@ bool Accessory::decodeBit(uint8_t byte, uint8_t bit, bool activeLow) {
 	return activeLow ? (!sw) : (sw);
 }
 
-void Accessory::begin() {
+void Accessory::begin(uint8_t sdaPin = SDA, uint8_t sclPin = SCL, uint32_t frequency = 100000) {
 #if defined(TWCR)
-	if (TWCR == 0)
+    if (TWCR == 0)
 #endif
 #if defined(ARDUINO_ARCH_ESP32)
-		Wire.begin(SDA,SCL,10000);
+    Wire.begin(sdaPin, sclPin, frequency);
 #else
-	Wire.begin();
-
+    Wire.begin(sdaPin, sclPin, frequency);
 #endif
-	// Start I2C if it's not running
+    // Start I2C if it's not running
 
-	switchMultiplexer();
+    switchMultiplexer();
 
-	initBytes();
-	identifyController();
-	if (getControllerType() == DrawsomeTablet) {
-		initBytesDrawsome();
-	}
-	delay(100);
-	_burstRead();
-	delay(100);
-	_burstRead();
+    initBytes();
+    identifyController();
+    if (getControllerType() == DrawsomeTablet) {
+        initBytesDrawsome();
+    }
+    delay(100);
+    _burstRead();
+    delay(100);
+    _burstRead();
 }
 
 boolean Accessory::_burstRead(uint8_t addr) {
